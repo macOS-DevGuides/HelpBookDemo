@@ -19,10 +19,7 @@ This project demonstrates:
 
 ## 🔄 Cache Management Script
 
-Included in:
-```
-Scripts/help_cache_smart_clean.sh
-```
+Included the **Clear Help Cache** Build Phase for the main target.
 
 This script:
 - Computes a hash of `.html` and `.plist` files in the `.help` bundle
