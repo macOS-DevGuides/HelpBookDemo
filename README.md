@@ -4,7 +4,7 @@ Apple's Help mechanism allows you to embed documentation in your app with virtua
 
 There are two main challenges related to using Apple's Help system:
 - The system relies heavily on hidden and undocumented registration mechanisms, which are tightly linked to bundle identifiers;  changing a bundle id after a help book is registered can lead to unexpected behaviour that may be difficult to diagnose and rectify.
-- The Help system is very stubborn with caching of Help content.  There are several undocumented cache locations that must be manually cleared for new Help content to display properly.
+- The Help system is very stubborn with caching of Help content.  The user help cache is linked to the app bundle version, and so should not normally be an issue for end users who install an actual app update.  However, this can pose problems during development as the cached content will always supersede changes to content bundled in the app *unless* the version number is changed *or* the cache is cleared.  
 
 This project demonstrates:
 - A working `.help` bundle integrated into an Xcode app
