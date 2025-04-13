@@ -22,7 +22,7 @@ This project demonstrates:
 Included the **Clear Help Cache** Build Phase for the main target.
 
 This script:
-- Is set to watch index.html in the help bundle
+- Is set to watch index.html in the help bundle (you can add other files)
 - Will clear the help cache when index.html changes
 - Will always clear the help cache on a clean build
 
