@@ -8,23 +8,23 @@ There are two main challenges related to using Apple's Help system:
 
 This project demonstrates:
 - A working `.help` bundle integrated into an Xcode app
-- Smart cache-clearing logic that only removes Help Book cache when files change
+- A cache-clearning build script that prevents the help viewer (Tips.app) from showing stale content while editing help content during development
 - Insights into Tips.app (macOS 15 Help Viewer) behavior, registration, and debugging
 
 ## 🛠️ How to Use
 
 1. Open the Xcode project (to be created) and build the app.
 2. Go to `Help > HelpBookDemo Help` in the menu bar.
-3. Modify the Help Book HTML and rebuild — the smart script detects changes and clears stale cache.
+3. Modify the Help Book HTML and rebuild — the build script will clear the cache and you should see your new content.
 
 ## 🔄 Cache Management Script
 
 Included the **Clear Help Cache** Build Phase for the main target.
 
 This script:
-- Computes a hash of `.html` and `.plist` files in the `.help` bundle
-- Only clears cache when files have changed
-- Bypasses fragile timestamp- or dependency-based mechanisms
+- Is set to watch index.html in the help bundle
+- Will clear the help cache when index.html changes
+- Will always clear the help cache on a clean build
 
 ## 📘 Resources
 
@@ -45,9 +45,11 @@ This script:
 
 - Purge cache:
   ```bash
-  hiutil -P
+  sudo hiutil -P
   killall -9 helpd Tips
   ```
+
+The command "sudo hiutil -P" seems to be the only way to clear stubborn cache conflicts that may arise if the application bundle ID is modified during development.
 
 ## 📎 License
 

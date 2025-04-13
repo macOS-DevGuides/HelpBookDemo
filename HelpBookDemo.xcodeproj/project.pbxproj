@@ -261,6 +261,7 @@
 			inputFileListPaths = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/HelpBookDemo/Resources/HelpBookDemo.help/Contents/Resources/en.lproj/index.html",
 			);
 			name = "Clear Help Cache";
 			outputFileListPaths = (
@@ -269,8 +270,8 @@
 				"$(BUILD_DIR)/help_cache_last_hash.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/usr/bin/env bash\n\n# 📘 Smart Help Book Cache Cleaner for macOS 15+ (Xcode-safe)\n\nHELP_BOOK_DIR=\"${SRCROOT}/HelpBookDemo/HelpBookDemo.help\"\nCACHE_DIR=\"$HOME/Library/Group Containers/group.com.apple.helpviewer.content/Library/Caches\"\nCACHE_PREFIX=\"org.macos-devguides.HelpBookDemo.org.macos-devguides.HelpBookDemo.help\"\n\n# 👇 This path is declared in Output Files so sandbox allows writing to it\nSTAMP_FILE=\"${SCRIPT_OUTPUT_FILE_0}\"\n\necho \"📘 [Help Cache Script] Checking for Help Book changes...\"\n\n# Compute a hash of .html and .plist files\nCURRENT_HASH=$(find \"$HELP_BOOK_DIR\" -type f \\( -name \"*.html\" -o -name \"*.plist\" \\) -exec md5 -q {} \\; | sort | md5)\n\n# Read last saved hash if file exists\nif [[ -f \"$STAMP_FILE\" ]]; then\n  PREV_HASH=$(cat \"$STAMP_FILE\")\nelse\n  PREV_HASH=\"\"\nfi\n\n# Compare and act\nif [[ \"$CURRENT_HASH\" != \"$PREV_HASH\" ]]; then\n  echo \"🔁 Help Book has changed — clearing Help Viewer cache.\"\n  shopt -s nullglob\n  MATCHES=(\"$CACHE_DIR\"/\"$CACHE_PREFIX\"*)\n  shopt -u nullglob\n  for path in \"${MATCHES[@]}\"; do\n    BASENAME=\"$(basename \"$path\")\"\n    DEST=\"$HOME/.Trash/${BASENAME}-$(date +%Y%m%d-%H%M%S)\"\n    echo \"🗑️  Moving cached Help Book → Trash: $DEST\"\n    mv \"$path\" \"$DEST\"\n  done\n  killall -9 helpd 2>/dev/null || echo \"ℹ️ helpd not running.\"\n  echo \"$CURRENT_HASH\" > \"$STAMP_FILE\"\n  echo \"✅ Cache cleared and hash updated.\"\nelse\n  echo \"✅ Help Book has not changed — skipping cache removal.\"\nfi\n";
+			shellPath = /bin/bash;
+			shellScript = "#!/usr/bin/env bash\n\n# 📘 Simple Help Book Cache Cleaner for macOS 15+ (Xcode-safe)\n\n# For proper dependency tracking, you must add any source files in the help bundle under the \"Input Files\" section below.\n# Alternately, a clean build should always run this script.\n\nCACHE_DIR=\"$HOME/Library/Group Containers/group.com.apple.helpviewer.content/Library/Caches\"\nCACHE_PREFIX=\"org.macos-devguides.HelpBookDemo.org.macos-devguides.HelpBookDemo.help\"\n\necho \"📘 [Help Cache Script] Clearing Help Book cache...\"\n\n# Find and remove all matching cache directories\nshopt -s nullglob\nMATCHES=(\"$CACHE_DIR\"/\"$CACHE_PREFIX\"*)\nshopt -u nullglob\n\nif [ ${#MATCHES[@]} -eq 0 ]; then\n  echo \"ℹ️ No matching cache files found.\"\nelse\n  for path in \"${MATCHES[@]}\"; do\n    echo \"🗑️ Removing cached Help Book: $(basename \"$path\")\"\n    rm -rf \"$path\"\n  done\n  echo \"✅ Cache cleared successfully.\"\nfi\n\n# Restart helpd to ensure clean state\nkillall -9 helpd 2>/dev/null || echo \"ℹ️ helpd not running.\"\n\necho \"✅ Help Book cache cleaning completed.\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
