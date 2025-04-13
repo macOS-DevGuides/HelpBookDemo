@@ -28,6 +28,12 @@ This script:
 
 ## 📘 Resources
 
+- RTFM:
+  ```bash
+  # All you really need to know
+  man hiutil
+  ```
+
 - Cached Help Books:
   ```
   ~/Library/Group Containers/group.com.apple.helpviewer.content/Library/Caches/
@@ -38,7 +44,7 @@ This script:
   plutil -p ~/Library/Preferences/com.apple.help.plist
   ```
 
-- Generate index:
+- Generate index (not necessary unless help content is hosted remotely):
   ```bash
   hiutil -I corespotlight -Caf HelpBookDemo.cshelpindex HelpBookDemo.help/Contents/Resources/
   ```
@@ -48,6 +54,7 @@ This script:
   sudo hiutil -P
   killall -9 helpd Tips
   ```
+
 
 The command "sudo hiutil -P" seems to be the only way to clear stubborn cache conflicts that may arise if the application bundle ID is modified during development.
 
