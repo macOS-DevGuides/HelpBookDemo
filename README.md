@@ -1,6 +1,6 @@
 # 🧭 macOS Help Book Example (macOS 15+)
 
-Apple's Help mechanism allows you to embed documentation in your app with virtually no additional code.  However, the internal sytems are very finnicky and rather poorly documented.  Apple's own [documentation for Help Books](https://developer.apple.com/library/archive/documentation/Carbon/Conceptual/ProvidingUserAssitAppleHelp/authoring_help/authoring_help_book.html) has not been updated since 2013, but the concepts still apply in this SwiftUI application developed for macOS 15 in 2025.
+Apple's Help mechanism allows you to embed documentation in your app with virtually no additional code.  Unfortunately, the internal sytems are very finnicky and rather poorly documented.  Apple's own [documentation for Help Books](https://developer.apple.com/library/archive/documentation/Carbon/Conceptual/ProvidingUserAssitAppleHelp/authoring_help/authoring_help_book.html) has not been updated since 2013, but the concepts still apply in this SwiftUI application developed for macOS 15 in 2025.
 
 There are two main challenges related to using Apple's Help system:
 - The system relies heavily on hidden and undocumented registration mechanisms, which are tightly linked to bundle identifiers;  changing a bundle id after a help book is registered can lead to unexpected behaviour that may be difficult to diagnose and rectify.
