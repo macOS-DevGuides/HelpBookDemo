@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleHelpBookName</key>
+    <string>org.macos-devguides.HelpBookDemo.help</string>
+	<key>CFBundleIdentifier</key>
+	<string>org.macos-devguides.HelpBookDemo.help</string>
+	<key>CFBundleName</key>
+	<string>HelpBookDemo</string>
+	<key>HPDBookAccessPath</key>
+	<string>en.lproj/index.html</string>
+	<key>HPDBookIndexPath</key>
+	<string>HelpBookDemo.cshelpindex</string>
+	<key>HPDBookTitle</key>
+	<string>HelpBookDemo Help</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>HPDBookIconPath</key>
+	<string></string>
+	<key>HPDBookKBProduct</key>
+	<string>helpbookdemo1</string>
+	<key>HPDBookKBURL</key>
+	<string>https://github.com/macOS-DevGuides</string>
+	<key>HPDBookRemoteURL</key>
+	<string></string>
+	<key>HPDBookTopicListCSSPath</key>
+	<string></string>
+	<key>HPDBookTopicListTemplatePath</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleSignature</key>
+	<string>hbwr</string>
+	<key>HPDBookType</key>
+	<string>3</string>
+</dict>
+</plist>

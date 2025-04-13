@@ -27,11 +27,29 @@
 		8AA91C182DABFEA10009E6B7 /* HelpBookDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelpBookDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AA91C282DABFEA20009E6B7 /* HelpBookDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelpBookDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AA91C322DABFEA20009E6B7 /* HelpBookDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HelpBookDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AA91C452DABFEB90009E6B7 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		8AA91C462DABFEB90009E6B7 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8A4D80972DAC2268009457CE /* Exceptions for "HelpBookDemo" folder in "HelpBookDemo" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8AA91C172DABFEA10009E6B7 /* HelpBookDemo */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8AA91C1A2DABFEA10009E6B7 /* HelpBookDemo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8A4D80972DAC2268009457CE /* Exceptions for "HelpBookDemo" folder in "HelpBookDemo" target */,
+			);
+			explicitFileTypes = {
+				Info.plist = text.plist.info;
+			};
 			path = HelpBookDemo;
 			sourceTree = "<group>";
 		};
@@ -75,6 +93,8 @@
 		8AA91C0F2DABFEA10009E6B7 = {
 			isa = PBXGroup;
 			children = (
+				8AA91C452DABFEB90009E6B7 /* LICENSE */,
+				8AA91C462DABFEB90009E6B7 /* README.md */,
 				8AA91C1A2DABFEA10009E6B7 /* HelpBookDemo */,
 				8AA91C2B2DABFEA20009E6B7 /* HelpBookDemoTests */,
 				8AA91C352DABFEA20009E6B7 /* HelpBookDemoUITests */,
@@ -102,6 +122,7 @@
 				8AA91C142DABFEA10009E6B7 /* Sources */,
 				8AA91C152DABFEA10009E6B7 /* Frameworks */,
 				8AA91C162DABFEA10009E6B7 /* Resources */,
+				8AA91CAB2DAC03E00009E6B7 /* Clear Help Cache */,
 			);
 			buildRules = (
 			);
@@ -230,6 +251,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8AA91CAB2DAC03E00009E6B7 /* Clear Help Cache */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Clear Help Cache";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILD_DIR)/help_cache_last_hash.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/usr/bin/env bash\n\n# 📘 Smart Help Book Cache Cleaner for macOS 15+ (Xcode-safe)\n\nHELP_BOOK_DIR=\"${SRCROOT}/HelpBookDemo/HelpBookDemo.help\"\nCACHE_DIR=\"$HOME/Library/Group Containers/group.com.apple.helpviewer.content/Library/Caches\"\nCACHE_PREFIX=\"org.macos-devguides.HelpBookDemo.org.macos-devguides.HelpBookDemo.help\"\n\n# 👇 This path is declared in Output Files so sandbox allows writing to it\nSTAMP_FILE=\"${SCRIPT_OUTPUT_FILE_0}\"\n\necho \"📘 [Help Cache Script] Checking for Help Book changes...\"\n\n# Compute a hash of .html and .plist files\nCURRENT_HASH=$(find \"$HELP_BOOK_DIR\" -type f \\( -name \"*.html\" -o -name \"*.plist\" \\) -exec md5 -q {} \\; | sort | md5)\n\n# Read last saved hash if file exists\nif [[ -f \"$STAMP_FILE\" ]]; then\n  PREV_HASH=$(cat \"$STAMP_FILE\")\nelse\n  PREV_HASH=\"\"\nfi\n\n# Compare and act\nif [[ \"$CURRENT_HASH\" != \"$PREV_HASH\" ]]; then\n  echo \"🔁 Help Book has changed — clearing Help Viewer cache.\"\n  shopt -s nullglob\n  MATCHES=(\"$CACHE_DIR\"/\"$CACHE_PREFIX\"*)\n  shopt -u nullglob\n  for path in \"${MATCHES[@]}\"; do\n    BASENAME=\"$(basename \"$path\")\"\n    DEST=\"$HOME/.Trash/${BASENAME}-$(date +%Y%m%d-%H%M%S)\"\n    echo \"🗑️  Moving cached Help Book → Trash: $DEST\"\n    mv \"$path\" \"$DEST\"\n  done\n  killall -9 helpd 2>/dev/null || echo \"ℹ️ helpd not running.\"\n  echo \"$CURRENT_HASH\" > \"$STAMP_FILE\"\n  echo \"✅ Cache cleared and hash updated.\"\nelse\n  echo \"✅ Help Book has not changed — skipping cache removal.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8AA91C142DABFEA10009E6B7 /* Sources */ = {
@@ -395,6 +438,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = HelpBookDemo/HelpBookDemo.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -402,6 +446,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HelpBookDemo/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -409,7 +454,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.endoquant.HelpBookDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.macos-devguides.HelpBookDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -423,6 +468,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = HelpBookDemo/HelpBookDemo.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -430,6 +476,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = HelpBookDemo/Info.plist;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -437,7 +484,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.endoquant.HelpBookDemo;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.macos-devguides.HelpBookDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -449,13 +496,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3MQ7N9D25;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.endoquant.HelpBookDemoTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.macos-devguides.HelpBookDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -467,13 +515,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3MQ7N9D25;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.endoquant.HelpBookDemoTests;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.macos-devguides.HelpBookDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -484,12 +533,13 @@
 		8AA91C432DABFEA20009E6B7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3MQ7N9D25;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.endoquant.HelpBookDemoUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.macos-devguides.HelpBookDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -500,12 +550,13 @@
 		8AA91C442DABFEA20009E6B7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = B3MQ7N9D25;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.endoquant.HelpBookDemoUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.macos-devguides.HelpBookDemo";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
