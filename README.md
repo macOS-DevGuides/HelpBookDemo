@@ -56,7 +56,7 @@ This script:
   ```
 
 
-The command "sudo hiutil -P" seems to be the only way to clear stubborn cache conflicts that may arise if the application bundle ID is modified during development.
+The command "sudo hiutil -P" seems to be the only way to clear stubborn cache conflicts that may arise if the application bundle ID is modified during development.  However, this command does *not* clear the user help caches that prevent updated help content from loading without a version bump.
 
 ## 📎 License
 
