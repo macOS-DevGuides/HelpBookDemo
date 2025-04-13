@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>HelpBookDemo Help</title>
-</head>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>HelpBookDemo Help</title>
+  </head>
 <body>
     <h1>Welcome to HelpBookDemo Help</h1>
     <p>This is a simple help book page for demonstration purposes.</p>
     <p>Try modifying the content and building the project.</p>
+    <p>The next time you run the project, you should see the updated help page.  This works because the build phase "Clear Help Cache" deletes the previous cache file from<p>
+    
+    <pre style="margin-left: 2em;"><code>~/Library/Group Containers/group.com.apple.helpviewer.content/Library/Caches/</code></pre>
+    
+    <p>Without this step, Apple's' Help Viewer app (Tips.app) will never show your updates.</p>
 </body>
 </html>
